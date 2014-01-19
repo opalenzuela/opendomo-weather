@@ -1,4 +1,4 @@
-opendomo-weather
-================
+opendomo-ivi
+============
 
-Weather plugin for OpenDomo OS 2
+Advanced Interactive Visual Interface for OpenDomo OS 2

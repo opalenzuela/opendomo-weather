@@ -1,0 +1,7 @@
+
+ Este paquete simula una estación meteorológica local, cogiendo los datos de
+ la API de Weather Underground: 
+ http://wiki.wunderground.com/index.php/API_-_XML
+
+ Su funcionamiento es muy esencial, pero el objetivo principal es simular 
+ recogidas de datos analógicos hasta que ODControl y ODEnergy estén a punto.
