@@ -1,40 +1,0 @@
-10
-
-dir
-4571
-svn://local.opendomo.com/opendomo.com/opendomo-weather/usr/local/opendomo/services
-svn://local.opendomo.com/opendomo.com
-
-
-
-2011-10-24T09:24:12.202363Z
-578
-opalenzuela
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-4d0759e7-5ecd-47a4-94b7-13b41e67df6c
-
-control
-dir
-
-syscript
-dir
-
-tools
-dir
-
-config
-dir
-
