@@ -10,9 +10,14 @@ DATADIR="/var/opendomo/control/wundstation"
 CONFDIR="/etc/opendomo/control/wundstation"
 STATSDIR="/var/opendomo/log/stats"
 
+if ! test -d "$STATSDIR"
+then
+	mkdir -p $STATSDIR 
+fi
+
 if test -f "$CFGFILE"; then
 	. $CFGFILE
-	if wget -q $URL?query=$STATION -O $LOCALFILE; then
+	if wget --no-check-certificate -q $URL?query=$STATION -O $LOCALFILE; then
 		mkdir -p $DATADIR
 		if ! test -d $CONFDIR; then
 			mkdir -p $CONFDIR
