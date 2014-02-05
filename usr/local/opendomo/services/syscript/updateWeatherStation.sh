@@ -4,11 +4,11 @@
 #package:wundstation
 
 CFGFILE="/etc/opendomo/wundstation.conf"
-LOCALFILE="/tmp/wundstation.tmp"
+LOCALFILE="/var/opendomo/tmp/wundstation.tmp"
 URL="http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml"
 DATADIR="/var/opendomo/control/wundstation"
 CONFDIR="/etc/opendomo/control/wundstation"
-STATSDIR="/var/log/stats"
+STATSDIR="/var/opendomo/log/stats"
 
 if test -f "$CFGFILE"; then
 	. $CFGFILE
@@ -21,7 +21,7 @@ if test -f "$CFGFILE"; then
 			echo "status=enabled" >> $CONFDIR/temp.info
 			echo "name='Outside temperature'" >> $CONFDIR/temp.info
 			echo "tags='climate'" >> $CONFDIR/temp.info
-			echo "units='ÂºC'" >> $CONFDIR/temp.info
+			echo "units='ºC'" >> $CONFDIR/temp.info
 			echo "type='analog'" >> $CONFDIR/temp.info
 
 			echo "way=in" > $CONFDIR/pressure.info
