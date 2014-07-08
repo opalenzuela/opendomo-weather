@@ -73,7 +73,15 @@ if test -f "$CFGFILE"; then
 			echo "$p" > $DATADIR/pressure
 			echo "$w" > $DATADIR/wind
 			echo "$h" > $DATADIR/humidity
-			echo "$d" > $DATADIR/description			
+			echo "$d" > $DATADIR/description
+			
+			cd $DATADIR
+			DEVNAME="odweather"
+			rm /var/www/data/$DEVNAME.odauto
+			for i in *
+			do
+				echo -n "{\"Name\":\"$i\",\"Type\":\"DIMC\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
+			done
 		fi
 	else
 		rm $DATADIR/*
