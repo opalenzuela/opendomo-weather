@@ -47,6 +47,9 @@ do_status () {
 }
 
 case "$1" in
+	background)
+		do_background
+		;;
 	start)
 		do_start
 		;;
