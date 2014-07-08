@@ -80,7 +80,7 @@ if test -f "$CFGFILE"; then
 			rm /var/www/data/$DEVNAME.odauto
 			for i in *
 			do
-				echo -n "{\"Name\":\"$i\",\"Type\":\"DIMC\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
+				echo -n "{\"Name\":\"$i\",\"Type\":\"AIMC\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
 			done
 		fi
 	else
