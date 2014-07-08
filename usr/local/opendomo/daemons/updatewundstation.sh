@@ -19,7 +19,7 @@ do_background() {
 	echo "ON" >$PIDFILE
 	while test -f $PIDFILE
 	do
-		/usr/local/opendomo/services/updateWeatherStation.sh 
+		/usr/local/opendomo/updateWeatherStation.sh 
 		sleep 60
 	done
 }
