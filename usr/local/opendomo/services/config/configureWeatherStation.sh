@@ -4,6 +4,7 @@
 #type:local
 
 CFGFILE="/etc/opendomo/wundstation.conf"
+STATIONS="BCN:Barcelona,ICOMUNID113:Madrid,ICOMUNID145:Valencia"
 
 if test -z "$1"; then
 	if test -f "$CFGFILE"; then
@@ -23,7 +24,7 @@ fi
 
 echo "#> Configure weather station"
 echo "form:configureWeatherStation.sh"
-echo "	station	Station code	text	$STATION"
+echo "	station	Station code	list[$STATIONS]	$STATION"
 echo
 echo "#INFO: This package uses the [Weather Underground] API or resources"
 echo "#URL:http://www.wunderground.com/"
