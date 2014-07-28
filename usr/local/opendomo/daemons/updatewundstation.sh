@@ -20,7 +20,7 @@ do_background() {
 	while test -f $PIDFILE
 	do
 		/usr/local/opendomo/updateWeatherStation.sh 
-		sleep 60
+		sleep 3600
 	done
 }
 
