@@ -1,6 +1,0 @@
-#desc:Update weather station
-#period:minutes
-#data:5
-#script:updateWeatherStation.sh
-#param:
-*/5 * * * * /usr/local/opendomo/services/syscript/updateWeatherStation.sh
