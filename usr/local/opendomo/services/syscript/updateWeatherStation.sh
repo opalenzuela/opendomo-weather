@@ -57,7 +57,13 @@ then
 	source $GEOFILE
 	URL="http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=$LATITIDE,$LONGITUDE"
 	if wget --no-check-certificate -q $URL?query=$STATION -O $LOCALFILE; then
-	
+		t=`grep temp_c $LOCALFILE | sed 's/[^0-9.]//g'`
+		p=`grep pressure_mb $LOCALFILE | sed 's/[^0-9.]//g'`
+		w=`grep wind_mph $LOCALFILE | sed 's/[^0-9.]//g'`
+		h=`grep relative_humidity $LOCALFILE | sed 's/[^0-9.]//g'`
+		d=`grep "<weather>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`		
+		H=`date +%H`
+		DATE=`date +%s`		
 	fi
 fi
 
@@ -97,16 +103,20 @@ then
 			echo "$h" > $DATADIR/humidity
 			echo "$d" > $DATADIR/description
 			
-			cd $DATADIR
-			DEVNAME="odweather"
-			rm /var/www/data/$DEVNAME.odauto
-			for i in *
-			do
-				echo -n "{\"Name\":\"$i\",\"Type\":\"AIMC\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
-			done
+
 		fi
 	else
 		rm $DATADIR/*
 	fi
 fi
 
+echo "Entering $DATADIR ..."
+cd $DATADIR
+DEVNAME="odweather"
+rm /var/www/data/$DEVNAME.odauto
+for i in *
+do
+	echo " processing $i ... "
+	echo -n "{\"Name\":\"$i\",\"Type\":\"AIMC\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
+done
+echo "DONE"
