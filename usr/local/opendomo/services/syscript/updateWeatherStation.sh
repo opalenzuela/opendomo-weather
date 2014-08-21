@@ -1,16 +1,20 @@
 #!/bin/sh
 #desc:Update weather station
 #type:local
-#package:wundstation
+#package:odweather
 
-CFGFILE="/etc/opendomo/wundstation.conf"
-LOCALFILE="/var/opendomo/tmp/wundstation.tmp"
-DATADIR="/var/opendomo/control/wundstation"
-CONFDIR="/etc/opendomo/control/wundstation"
+DEVNAME="odweather"
+CFGFILE="/etc/opendomo/$DEVNAME.conf"
+LOCALFILE="/var/opendomo/tmp/$DEVNAME.tmp"
+DATADIR="/var/opendomo/control/$DEVNAME"
+CONFDIR="/etc/opendomo/control/$DEVNAME"
 GEOFILE="/etc/opendomo/geo.conf"
+STATIONLIST="/etc/opendomo/weatherstations.lst"
 
-#BLOCK This block should be common
-mkdir -p $DATADIR
+#If $DATADIR does not exist, we create it
+test -d $DATADIR || mkdir -p $DATADIR
+
+#If $CONFDIR does not exist, we create it and configure all the ports
 if ! test -d $CONFDIR; then
 	mkdir -p $CONFDIR
 
@@ -49,38 +53,44 @@ if ! test -d $CONFDIR; then
 	echo "units='%'" >> $CONFDIR/description.info
 	echo "type='text'" >> $CONFDIR/description.info				
 fi
-#BLOCK end
+#Prerequisites end
 
-# Case 1: we have geolocation but no API key
-if test -f "$GEOFILE" && ! test -f "$APIKEY"
+# Case 1: we don't have geolocation nor configuration, we abort (it requires manual config)
+if ! test -f "$GEOFILE" && ! test -f "$CFGFILE"
+then
+	echo "ERROR: No geolocation information found"
+	exit
+fi
+
+# Case 2: we have geolocation but no configuration file
+if ! test -f "$CFGFILE"
 then
 	source $GEOFILE
-	URL="http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=$LATITIDE,$LONGITUDE"
-	if wget --no-check-certificate -q $URL?query=$STATION -O $LOCALFILE; then
-		t=`grep temp_c $LOCALFILE | sed 's/[^0-9.]//g'`
-		p=`grep pressure_mb $LOCALFILE | sed 's/[^0-9.]//g'`
-		w=`grep wind_mph $LOCALFILE | sed 's/[^0-9.]//g'`
-		h=`grep relative_humidity $LOCALFILE | sed 's/[^0-9.]//g'`
-		d=`grep "<weather>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`		
-		H=`date +%H`
-		DATE=`date +%s`		
+	URL="http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=$latitude,$longitude"
+	if wget --no-check-certificate -q $URL -O $LOCALFILE
+	then
+		grep '<icao>' $LOCALFILE   | cut -f2 -d'<' | cut -f2 -d'>' > $STATIONLIST
+		STATION=`head -n1 STATIONLIST`
+		echo "STATION=$STATION" > $CFGFILE
+	else
+		echo "Error: impossible to locate nearest station"
+		exit 
 	fi
 fi
+source $CFGFILE
 
-# Case 2: we have geolocation and API key
-if test -f "$GEOFILE" && ! test -f "$APIKEY"
+# Case 3: we have geolocation and API key
+if ! test -z "$APIKEY"
 then
+	echo "Using API key $APIKEY ..."
 	source $GEOFILE
-	source $APIKEY
-fi
-
-
-# Case 3: we have no geolocation nor API key
-if test -f "$CFGFILE"
-then
-	URL="http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml"
-	. $CFGFILE
-	if wget --no-check-certificate -q $URL?query=$STATION -O $LOCALFILE; then
+	echo "TODO"
+else
+# Case 4: we have no geolocation nor API key
+	source $CFGFILE
+	URL="http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=$STATION"
+	if wget --no-check-certificate $URL -O $LOCALFILE
+	then
 		if test -f "$LOCALFILE"; then
 			t=`grep temp_c $LOCALFILE | sed 's/[^0-9.]//g'`
 			p=`grep pressure_mb $LOCALFILE | sed 's/[^0-9.]//g'`
@@ -102,8 +112,6 @@ then
 			echo "$w" > $DATADIR/wind
 			echo "$h" > $DATADIR/humidity
 			echo "$d" > $DATADIR/description
-			
-
 		fi
 	else
 		rm $DATADIR/*
@@ -112,11 +120,10 @@ fi
 
 echo "Entering $DATADIR ..."
 cd $DATADIR
-DEVNAME="odweather"
-rm /var/www/data/$DEVNAME.odauto
+test -f /var/www/data/$DEVNAME.odauto && rm /var/www/data/$DEVNAME.odauto
 for i in *
 do
 	echo " processing $i ... "
-	echo -n "{\"Name\":\"$i\",\"Type\":\"AIMC\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
+	echo -n "{\"Name\":\"$i\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat $i`\",\"Id\":\"$DEVNAME/$i\"}," >> /var/www/data/$DEVNAME.odauto
 done
 echo "DONE"
