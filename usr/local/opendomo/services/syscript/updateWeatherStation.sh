@@ -95,7 +95,8 @@ then
 			p=`grep pressure_mb $LOCALFILE | sed 's/[^0-9.]//g'`
 			w=`grep wind_mph $LOCALFILE | sed 's/[^0-9.]//g'`
 			h=`grep relative_humidity $LOCALFILE | sed 's/[^0-9.]//g'`
-			d=`grep "<weather>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`
+			d=`grep "<icon>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`
+			
 			
 			H=`date +%H`
 			DATE=`date +%s`
@@ -105,12 +106,6 @@ then
 				# Error
 				exit 1
 			fi
-
-			echo "$t" > $DATADIR/temp
-			echo "$p" > $DATADIR/pressure
-			echo "$w" > $DATADIR/wind
-			echo "$h" > $DATADIR/humidity
-			echo "$d" > $DATADIR/description
 		fi
 	else
 		rm $DATADIR/*
@@ -125,7 +120,7 @@ else
 			p=`grep pressure_mb $LOCALFILE | sed 's/[^0-9.]//g'`
 			w=`grep wind_mph $LOCALFILE | sed 's/[^0-9.]//g'`
 			h=`grep relative_humidity $LOCALFILE | sed 's/[^0-9.]//g'`
-			d=`grep "<weather>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`
+			d=`grep "<icon>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`
 			
 			H=`date +%H`
 			DATE=`date +%s`
@@ -135,17 +130,26 @@ else
 				# Error
 				exit 1
 			fi
-
-			echo "$t" > $DATADIR/temp
-			echo "$p" > $DATADIR/pressure
-			echo "$w" > $DATADIR/wind
-			echo "$h" > $DATADIR/humidity
-			echo "$d" > $DATADIR/description
 		fi
 	else
 		rm $DATADIR/*
 	fi
 fi
+
+# Triggering events
+old_t=`cat $DATADIR/temp`
+test "$old_t" == "$t" || test "$t" -lt 5 && test "$old_t" -gt 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature"
+test "$old_t" == "$t" || test "$t" -lt 1 && test "$old_t" -gt 1 && logevent "freezing" $DEVNAME "Entering freezing temperature"
+old_d=`cat $DATADIR/description`
+test "$old_d" == "$d" || logevent $d $DEVNAME "Weather changing to [$d]"
+
+
+# Saving data
+echo "$t" > $DATADIR/temp
+echo "$p" > $DATADIR/pressure
+echo "$w" > $DATADIR/wind
+echo "$h" > $DATADIR/humidity
+echo "$d" > $DATADIR/description
 
 echo "Entering $DATADIR ..."
 cd $DATADIR
