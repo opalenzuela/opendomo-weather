@@ -65,12 +65,14 @@ fi
 # Case 2: we have geolocation but no configuration file
 if ! test -f "$CFGFILE"
 then
+	echo "No configuration file found. Autoconfiguring..."
 	source $GEOFILE
-	URL="http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=$latitude,$longitude"
-	if wget --no-check-certificate -q $URL -O $LOCALFILE
+	URL="http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml"
+	echo "URL: $URL"
+	if wget --no-check-certificate -q "$URL?query=$latitude,$longitude" -O $LOCALFILE
 	then
 		grep '<icao>' $LOCALFILE   | cut -f2 -d'<' | cut -f2 -d'>' > $STATIONLIST
-		STATION=`head -n1 STATIONLIST`
+		STATION=`head -n1 $STATIONLIST`
 		echo "STATION=$STATION" > $CFGFILE
 	else
 		echo "Error: impossible to locate nearest station"
