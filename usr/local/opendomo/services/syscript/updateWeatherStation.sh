@@ -74,6 +74,8 @@ then
 		grep '<icao>' $LOCALFILE   | cut -f2 -d'<' | cut -f2 -d'>' > $STATIONLIST
 		STATION=`head -n1 $STATIONLIST`
 		echo "STATION=$STATION" > $CFGFILE
+		echo "Autoconfigured to $STATION"
+		echo
 	else
 		echo "Error: impossible to locate nearest station"
 		exit 
@@ -85,11 +87,36 @@ source $CFGFILE
 if ! test -z "$APIKEY"
 then
 	echo "Using API key $APIKEY ..."
-	source $GEOFILE
-	echo "TODO"
+	URL="http://api.wunderground.com/api/$APIKEY/conditions/q/$STATION.xml"
+	if wget --no-check-certificate $URL -O $LOCALFILE
+	then
+		if test -f "$LOCALFILE"; then
+			t=`grep temp_c $LOCALFILE | sed 's/[^0-9.]//g'`
+			p=`grep pressure_mb $LOCALFILE | sed 's/[^0-9.]//g'`
+			w=`grep wind_mph $LOCALFILE | sed 's/[^0-9.]//g'`
+			h=`grep relative_humidity $LOCALFILE | sed 's/[^0-9.]//g'`
+			d=`grep "<weather>" $LOCALFILE | cut -f2 -d'>' | cut -f1 -d'<'`
+			
+			H=`date +%H`
+			DATE=`date +%s`
+			rm $LOCALFILE
+
+			if test -z "$p" || test "$p" = "0"; then
+				# Error
+				exit 1
+			fi
+
+			echo "$t" > $DATADIR/temp
+			echo "$p" > $DATADIR/pressure
+			echo "$w" > $DATADIR/wind
+			echo "$h" > $DATADIR/humidity
+			echo "$d" > $DATADIR/description
+		fi
+	else
+		rm $DATADIR/*
+	fi
 else
 # Case 4: we have no geolocation nor API key
-	source $CFGFILE
 	URL="http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=$STATION"
 	if wget --no-check-certificate $URL -O $LOCALFILE
 	then
@@ -122,6 +149,7 @@ fi
 
 echo "Entering $DATADIR ..."
 cd $DATADIR
+test -d /var/www/data || mkdir /var/www/data
 test -f /var/www/data/$DEVNAME.odauto && rm /var/www/data/$DEVNAME.odauto
 for i in *
 do

@@ -31,11 +31,12 @@ if ! test -z "$1"; then
 	fi
 fi
 
+source $CFGFILE
 echo "#> Configure weather station"
 echo "form:configureWeatherStation.sh"
 echo "	station	Station code	list[$STATIONS]	$STATION"
 echo "	apikey	API key 	text	$APIKEY"
 echo
 echo "#INFO: This package uses the [Weather Underground] API or resources"
-echo "#URL:http://www.wunderground.com/"
+echo "#URL:http://www.wunderground.com/?apiref=62746aab6951fe52"
 echo

@@ -1,9 +1,6 @@
-#configureWeatherStation_frm {
+#configureWeatherStation {
+	padding-top: 90px;
 	background-image: url("http://icons-ak.wxug.com/i/wu/wuLogoNon.png");
 	background-position: top right;
 	background-repeat: no-repeat;
-}
-
-#configureWeatherStation {
-	margin-top: 80px;
 }
