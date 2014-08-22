@@ -161,5 +161,5 @@ echo -n "{\"Name\":\"pressure\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"
 echo -n "{\"Name\":\"wind\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat wind`\",\"Id\":\"$DEVNAME/wind\"}," >> /var/www/data/$DEVNAME.odauto
 echo -n "{\"Name\":\"humidity\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat humidity`\",\"Id\":\"$DEVNAME/humidity\"}," >> /var/www/data/$DEVNAME.odauto
 echo -n "{\"Name\":\"description\",\"Type\":\"TXT\",\"Tag\":\"climate\",\"Value\":\"`cat description`\",\"Id\":\"$DEVNAME/description\"}," >> /var/www/data/$DEVNAME.odauto
-echo -n "{\"Name\":\"icon\",\"Type\":\"IMG\",\"Tag\":\"climate\",\"Value\":\"/data/`cat description`.gif\",\"Id\":\"$DEVNAME/icon\"}," >> /var/www/data/$DEVNAME.odauto
+echo -n "{\"Name\":\"icon\",\"Type\":\"IMG\",\"Tag\":\"climate\",\"Value\":\"/images/`cat description`.gif\",\"Id\":\"$DEVNAME/icon\"}," >> /var/www/data/$DEVNAME.odauto
 echo "DONE"
