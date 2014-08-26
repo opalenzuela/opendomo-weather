@@ -138,8 +138,9 @@ fi
 
 # Triggering events
 old_t=`cat $DATADIR/temp`
-test "$old_t" == "$t" || test "$t" -lt 5 && test "$old_t" -gt 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature"
-test "$old_t" == "$t" || test "$t" -lt 1 && test "$old_t" -gt 1 && logevent "freezing" $DEVNAME "Entering freezing temperature"
+# temperature lowers +    new temp < 5  +     
+test "$old_t" -gt "$t" && test "$t" -lt 5 && test "$old_t" -ge 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature"
+test "$old_t" -gt "$t" && test "$t" -lt 1 && test "$old_t" -ge 1 && logevent "freezing" $DEVNAME "Entering freezing temperature"
 old_d=`cat $DATADIR/description`
 test "$old_d" == "$d" || logevent $d $DEVNAME "Weather changing to [$d]"
 
