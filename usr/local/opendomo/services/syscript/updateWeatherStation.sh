@@ -151,6 +151,12 @@ echo "$p" > $DATADIR/pressure
 echo "$w" > $DATADIR/wind
 echo "$h" > $DATADIR/humidity
 echo "$d" > $DATADIR/description
+# Also in .value files
+echo "$t" > $DATADIR/temp.value
+echo "$p" > $DATADIR/pressure.value
+echo "$w" > $DATADIR/wind.value
+echo "$h" > $DATADIR/humidity.value
+echo "$d" > $DATADIR/description.value
 
 echo "Entering $DATADIR ..."
 cd $DATADIR
