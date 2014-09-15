@@ -3,6 +3,9 @@
 #type:local
 #package:odweather
 
+
+# Copyright(c) 2014 OpenDomo Services SL. Licensed under GPL v3 or later
+
 DEVNAME="odweather"
 CFGFILE="/etc/opendomo/$DEVNAME.conf"
 LOCALFILE="/var/opendomo/tmp/$DEVNAME.tmp"
@@ -139,8 +142,8 @@ fi
 # Triggering events
 old_t=`cat $DATADIR/temp`
 # temperature lowers +    new temp < 5  +     
-test "$old_t" -gt "$t" && test "$t" -lt 5 && test "$old_t" -ge 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature"
-test "$old_t" -gt "$t" && test "$t" -lt 1 && test "$old_t" -ge 1 && logevent "freezing" $DEVNAME "Entering freezing temperature"
+test "$old_t" -gt "$t" && test "$t" -lt 5 && test "$old_t" -ge 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature [$old_t  - $t]"
+test "$old_t" -gt "$t" && test "$t" -lt 1 && test "$old_t" -ge 1 && logevent "freezing" $DEVNAME "Entering freezing temperature [$old_t  - $t]"
 old_d=`cat $DATADIR/description`
 test "$old_d" == "$d" || logevent $d $DEVNAME "Weather changing to [$d]"
 
