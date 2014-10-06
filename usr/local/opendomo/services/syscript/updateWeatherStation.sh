@@ -80,7 +80,7 @@ then
 		echo "Autoconfigured to $STATION"
 		echo
 	else
-		echo "Error: impossible to locate nearest station"
+		echo "ERROR: impossible to locate nearest station"
 		exit 
 	fi
 fi
