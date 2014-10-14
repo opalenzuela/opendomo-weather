@@ -14,7 +14,10 @@ then
 	do
 		STATIONS="$STATIONS,$s"
 	done
+	RECONFIGURE=0
 else
+	echo "#WARN Geolocation was disabled. Please, reconfigure your system"
+	RECONFIGURE=1
 	STATIONS="BCN:Barcelona,ICOMUNID113:Madrid,ICOMUNID145:Valencia"
 fi
 
@@ -37,6 +40,11 @@ echo "#> Configure weather station"
 echo "form:configureWeatherStation.sh"
 echo "	station	Station code	list[$STATIONS]	$STATION"
 echo "	apikey	WeatherUnderground API key 	text	$APIKEY"
+if test $RECONFIGURE -eq 1
+then
+	echo "actions:"
+	echo "	wizFirstConfigurationStep1.sh	Reconfigure system"
+fi
 echo
 echo "#INFO: This package uses the [Weather Underground] API or resources"
 echo "#URL:http://www.wunderground.com/?apiref=62746aab6951fe52"
