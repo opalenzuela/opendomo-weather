@@ -141,12 +141,17 @@ else
 fi
 
 # Triggering events
-old_t=`cat $DATADIR/temp`
-# temperature lowers +    new temp < 5  +     
-test "$old_t" -gt "$t" && test "$t" -lt 5 && test "$old_t" -ge 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature [$old_t  - $t]"
-test "$old_t" -gt "$t" && test "$t" -lt 1 && test "$old_t" -ge 1 && logevent "freezing" $DEVNAME "Entering freezing temperature [$old_t  - $t]"
-old_d=`cat $DATADIR/description`
-test "$old_d" == "$d" || logevent $d $DEVNAME "Weather changing to [$d]"
+if test -f $DATADIR/temp; then
+	old_t=`cat $DATADIR/temp`
+	# temperature lowers +    new temp < 5  +     
+	test "$old_t" -gt "$t" && test "$t" -lt 5 && test "$old_t" -ge 5 && logevent "warnfreezing" $DEVNAME "Approaching freezing temperature [$old_t  - $t]"
+	test "$old_t" -gt "$t" && test "$t" -lt 1 && test "$old_t" -ge 1 && logevent "freezing" $DEVNAME "Entering freezing temperature [$old_t  - $t]"
+fi
+
+if test -f $DATADIR/description; then
+	old_d=`cat $DATADIR/description`
+	test "$old_d" == "$d" || logevent $d $DEVNAME "Weather changing to [$d]"
+fi
 
 
 # Saving data
