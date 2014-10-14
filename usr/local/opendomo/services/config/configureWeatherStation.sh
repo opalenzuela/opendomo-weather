@@ -34,8 +34,11 @@ if ! test -z "$1"; then
 	fi
 fi
 
-touch $CFGFILE
-source $CFGFILE
+if test -f $CFGFILE;
+then
+	source $CFGFILE
+fi
+
 echo "#> Configure weather station"
 echo "form:configureWeatherStation.sh"
 echo "	station	Station code	list[$STATIONS]	$STATION"

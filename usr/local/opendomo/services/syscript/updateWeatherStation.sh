@@ -65,8 +65,9 @@ then
 	exit
 fi
 
+
 # Case 2: we have geolocation but no configuration file
-if ! test -f "$CFGFILE"
+if ! test -f "$CFGFILE" && grep -q latitude $CFGFILE
 then
 	echo "No configuration file found. Autoconfiguring..."
 	source $GEOFILE
