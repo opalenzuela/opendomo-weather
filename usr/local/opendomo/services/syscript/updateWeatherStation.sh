@@ -74,7 +74,7 @@ then
 	echo "URL: $URL"
 	if wget --no-check-certificate -q "$URL?query=$latitude,$longitude" -O $LOCALFILE
 	then
-		grep '<icao>' $LOCALFILE   | cut -f2 -d'<' | cut -f2 -d'>' > $STATIONLIST
+		grep '<icao>' $LOCALFILE  | grep [A-Z] | cut -f2 -d'<' | cut -f2 -d'>' > $STATIONLIST
 		STATION=`head -n1 $STATIONLIST`
 		echo "STATION=$STATION" > $CFGFILE
 		echo "Autoconfigured to $STATION"
@@ -115,6 +115,7 @@ then
 	fi
 else
 # Case 4: we have no geolocation nor API key
+	echo "Case 4"
 	URL="http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=$STATION"
 	if wget --no-check-certificate $URL -O $LOCALFILE
 	then
