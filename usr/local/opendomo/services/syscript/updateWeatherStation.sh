@@ -76,8 +76,13 @@ then
 	then
 		grep '<icao>' $LOCALFILE  | grep [A-Z] | cut -f2 -d'<' | cut -f2 -d'>' > $STATIONLIST
 		STATION=`head -n1 $STATIONLIST`
-		echo "STATION=$STATION" > $CFGFILE
-		echo "Autoconfigured to $STATION"
+		if test -z "$STATION" ; then
+			echo "#ERROR Couldn't find a nearby station"
+			exit 1
+		else
+			echo "STATION=$STATION" > $CFGFILE
+			echo "Autoconfigured to $STATION"
+		fi
 		echo
 	else
 		echo "ERROR: impossible to locate nearest station"
