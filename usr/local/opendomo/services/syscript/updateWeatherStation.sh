@@ -179,7 +179,7 @@ test -f /var/www/data/$DEVNAME.odauto && rm /var/www/data/$DEVNAME.odauto
 
 echo "{\"Name\":\"temp\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat temp`\",\"Id\":\"$DEVNAME/temp\"}," >> /var/www/data/$DEVNAME.odauto
 echo "{\"Name\":\"pressure\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat pressure`\",\"Id\":\"$DEVNAME/pressure\"}," >> /var/www/data/$DEVNAME.odauto
-echo "{\"Name\":\"wind\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat wind`\",\"Id\":\"$DEVNAME/wind\"},\n" >> /var/www/data/$DEVNAME.odauto
+echo "{\"Name\":\"wind\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat wind`\",\"Id\":\"$DEVNAME/wind\"}," >> /var/www/data/$DEVNAME.odauto
 echo "{\"Name\":\"humidity\",\"Type\":\"AI\",\"Tag\":\"climate\",\"Value\":\"`cat humidity`\",\"Id\":\"$DEVNAME/humidity\"}," >> /var/www/data/$DEVNAME.odauto
 echo "{\"Name\":\"description\",\"Type\":\"TXT\",\"Tag\":\"climate\",\"Value\":\"`cat description`\",\"Id\":\"$DEVNAME/description\"}," >> /var/www/data/$DEVNAME.odauto
 echo "{\"Name\":\"icon\",\"Type\":\"IMG\",\"Tag\":\"climate\",\"Value\":\"/images/`cat description`.gif\",\"Id\":\"$DEVNAME/icon\"}," >> /var/www/data/$DEVNAME.odauto
