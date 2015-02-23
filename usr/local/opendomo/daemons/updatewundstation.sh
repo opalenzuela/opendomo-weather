@@ -6,7 +6,7 @@
 # Should-Start:      
 # Default-Start:     1 2 3 4 5
 # Default-Stop:      0 6
-# Short-Description: Update weather station
+# Short-Description: Weather station
 # Description:       Update weather station
 #
 ### END INIT INFO
